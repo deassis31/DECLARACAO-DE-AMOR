@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,100 +7,107 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
+      font-family: 'Arial', sans-serif;
+      background: #fff0f6;
+      overflow: hidden;
       text-align: center;
-      background: #ffbfd3;
-      background-image: url('https://www.transparenttextures.com/patterns/hearts.png');
+      color: #d6336c;
     }
-    .container {
-      padding: 30px;
-      background: rgba(0,0,0,0.3);
-      border-radius: 20px;
-      margin: 40px auto;
-      max-width: 500px;
-    }
+
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
+      margin-top: 60px;
+      font-size: 2.5rem;
     }
-    input {
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      margin: 10px 0;
-      font-size: 1em;
-    }
-    button {
-      background: #ff4081;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 1em;
-      margin-top: 10px;
-    }
-    .counter {
-      font-size: 1.5em;
-      margin: 20px 0;
-    }
-    .quote {
+
+    .contador {
       margin-top: 30px;
-      font-size: 1.2em;
-      font-style: italic;
-      background: rgba(255,255,255,0.2);
-      padding: 15px;
-      border-radius: 10px;
+      font-size: 1.4rem;
+    }
+
+    .btn {
+      margin-top: 40px;
+      background-color: #ff66a3;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .hearts {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/4/4f/Red_Heart.svg') no-repeat center;
+      background-size: contain;
+      animation: float 8s infinite ease-in;
+      opacity: 0.6;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) scale(0.8);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Nosso Amor</h1>
-    <p>Escolha a data que começamos a namorar:</p>
-    <input type="date" id="startDate">
-    <br>
-    <button onclick="startCounting()">Ver quanto tempo estamos juntos</button>
-    <div class="counter" id="counterDisplay"></div>
-    <div class="quote" id="quoteDisplay"></div>
-  </div>
+
+  <h1>Estamos juntos há:</h1>
+  <div class="contador" id="contador"></div>
+
+  <a class="btn" href="segunda.html">Ver frases românticas</a>
+
+  <div class="hearts" id="hearts"></div>
 
   <script>
-    const quotes = [
-      "Você é o meu hoje e todos os meus amanhãs.",
-      "Estar com você é meu lugar favorito.",
-      "Te amo mais a cada segundo.",
-      "Nosso amor é para sempre.",
-      "Você me completa de um jeito único.",
-      "O tempo com você voa porque cada segundo é perfeito."
-    ];
+    // Data de início do relacionamento
+    const dataInicio = new Date("2022-02-14T00:00:00");
 
-    function startCounting() {
-      const dateInput = document.getElementById("startDate").value;
-      if (!dateInput) return alert("Por favor, escolha uma data!");
+    function atualizarContador() {
+      const agora = new Date();
+      const diff = agora - dataInicio;
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diff / (1000 * 60)) % 60);
+      const segundos = Math.floor((diff / 1000) % 60);
 
-      const startDate = new Date(dateInput);
-      const counterDisplay = document.getElementById("counterDisplay");
-      const quoteDisplay = document.getElementById("quoteDisplay");
-
-      setInterval(() => {
-        const now = new Date();
-        const diff = now - startDate;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-
-        counterDisplay.innerHTML = 
-          `Estamos juntos há: <br><strong>${days}</strong> dias, <strong>${hours}</strong> horas, <strong>${minutes}</strong> minutos e <strong>${seconds}</strong> segundos.`;
-
-      }, 1000);
-
-      quoteDisplay.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("contador").innerText =
+        `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
     }
+
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+
+    // Corações animados
+    const heartsContainer = document.getElementById('hearts');
+    function criarCoracao() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 5 + Math.random() * 5 + 's';
+      heartsContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }
+
+    setInterval(criarCoracao, 300);
   </script>
 </body>
 </html>
-<a href="pagina2.html">Visitar a página de frases e fotos</a>
